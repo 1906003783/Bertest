@@ -116,7 +116,8 @@ class Load1KGPDataset(object):
                 break  # 如果已经mask的数量大于等于num_mlm_preds则停止mask
             masked_token_id = None
             # 80%的时间：将词替换为['MASK']词元，但这里是直接替换为['MASK']对应的id
-            if random.random() < self.masked_token_rate:  # 0.8
+            rand_t=random.random()
+            if rand_t < self.masked_token_rate:  # 0.8
                 masked_token_id = self.MASK_IDS
             else:
                 # 10%的时间：保持词不变
@@ -249,6 +250,54 @@ class Load1KGPDataset(object):
         logging.info(f"## 成功返回训练集样本（{len(train_iter.dataset)}）个、开发集样本（{len(val_iter.dataset)}）个"
                      f"测试集样本（{len(test_iter.dataset)}）个.")
         return train_iter, test_iter, val_iter
+
+def span_masking(sentence, spans, tokens, MASK_IDS, mask_id, pad_len, mask, replacement='word_piece', endpoints='external'):
+    sentence = np.copy(sentence)
+    sent_length = len(sentence)
+    target = np.full(sent_length, pad)
+    pair_targets = []
+    spans = merge_intervals(spans)
+    assert len(mask) == sum([e - s + 1 for s,e in spans])
+    # print(list(enumerate(sentence)))
+    for start, end in spans:
+        lower_limit = 0 if endpoints == 'external' else -1
+        upper_limit = sent_length - 1 if endpoints == 'external' else sent_length
+        if start > lower_limit and end < upper_limit:
+            if endpoints == 'external':
+                pair_targets += [[start - 1, end + 1]]
+            else:
+                pair_targets += [[start, end]]
+            pair_targets[-1] += [sentence[i] for i in range(start, end + 1)]
+        rand = np.random.random()
+        for i in range(start, end + 1):
+            assert i in mask
+            target[i] = sentence[i]
+            if replacement == 'word_piece':
+                rand = np.random.random()
+            if rand < 0.8:
+                masked_token_id = mask_id
+            elif rand < 0.9:
+                # sample random token according to input distribution
+                token= np.random.choice(tokens)
+                sentence[i] = np.random.choice(tokens)
+    pair_targets = pad_to_len(pair_targets, MASK_IDS, pad_len + 2)
+    # if pair_targets is None:
+    return sentence, target, pair_targets
+
+def merge_intervals(intervals):
+    intervals = sorted(intervals, key=lambda x : x[0])
+    merged = []
+    for interval in intervals:
+        # if the list of merged intervals is empty or if the current
+        # interval does not overlap with the previous, simply append it.
+        if not merged or merged[-1][1] + 1 < interval[0]:
+            merged.append(interval)
+        else:
+        # otherwise, there is overlap, so we merge the current and previous
+        # intervals.
+            merged[-1][1] = max(merged[-1][1], interval[1])
+
+    return merged
 
 
 if __name__ == '__main__':
