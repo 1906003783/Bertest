@@ -1,0 +1,5 @@
+*.pyc
+cache*
+dna_cache*
+*.csv
+test/
