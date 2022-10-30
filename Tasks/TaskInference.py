@@ -216,11 +216,11 @@ if __name__ == '__main__':
     parser.add_argument('-ftrs', '--first_train_start', type=int,
                         help='Position where first 512 SNPs in training set start.', default=0)
     parser.add_argument('-ltrs', '--last_train_start', type=int,
-                        help='Position where last 512 SNPs in training set start.', default=4000)
+                        help='Position where last 512 SNPs in training set start.', default=1000)
     parser.add_argument('-ftes', '--first_test_start', type=int,
                         help='Position where first 512 SNPs in testing set start.', default=0)
     parser.add_argument('-ltes', '--last_test_start', type=int,
-                        help='Position where last 512 SNPs in testing set start.', default=4000)
+                        help='Position where last 512 SNPs in testing set start.', default=1000)
     parser.add_argument('-trs', '--train_set', type=str,
                         help='train_set', default='hap_train.csv')
     parser.add_argument('-tes', '--test_set', type=str,
