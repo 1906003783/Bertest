@@ -3,3 +3,4 @@ cache*
 dna_cache*
 *.csv
 test/
+*.pt
