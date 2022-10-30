@@ -18,7 +18,7 @@ def vec2str(vec, start, max_len=512):
     return s
 
 
-def read_1KGP(filepath=None, first_start=0, last_start=0, max_len=512):
+def read_dnaseq(filepath=None, first_start=0, last_start=0, max_len=512):
     df = pd.read_csv(filepath, header=None)
     df = df.to_numpy()
     paragraphs = []
@@ -27,7 +27,6 @@ def read_1KGP(filepath=None, first_start=0, last_start=0, max_len=512):
         for vec in df:
             paragraphs.append(vec2str(vec, start, max_len=max_len))
         start = start + max_len
-    random.shuffle(paragraphs)
     return paragraphs
 
 
@@ -114,19 +113,14 @@ class Load1KGPDataset(object):
         for mlm_pred_position in candidate_pred_positions:
             if len(pred_positions) >= num_mlm_preds:
                 break  # 如果已经mask的数量大于等于num_mlm_preds则停止mask
-            masked_token_id = None
+            masked_token_id = token_ids[mlm_pred_position]  # 10%的时间：保持词不变
             # 80%的时间：将词替换为['MASK']词元，但这里是直接替换为['MASK']对应的id
             rand_t=random.random()
             if rand_t < self.masked_token_rate:  # 0.8
                 masked_token_id = self.MASK_IDS
-            else:
-                # 10%的时间：保持词不变
-                if random.random() < self.masked_token_unchanged_rate:  # 0.5
-                    masked_token_id = token_ids[mlm_pred_position]
+            elif random.random() > self.masked_token_unchanged_rate:  # 0.5
                 # 10%的时间：用随机词替换该词
-                else:
-                    masked_token_id = random.randint(
-                        0, len(self.vocab.stoi) - 1)
+                    masked_token_id = random.randint(0, len(self.vocab.stoi) - 1)
             mlm_input_tokens_id[mlm_pred_position] = masked_token_id
             pred_positions.append(mlm_pred_position)  # 保留被mask位置的索引信息
         # 构造mlm任务中需要预测位置对应的正确标签，如果其没出现在pred_positions则表示该位置不是mask位置
@@ -157,6 +151,7 @@ class Load1KGPDataset(object):
         mlm_input_tokens_id, mlm_label = self.replace_masked_tokens(
             token_ids, candidate_pred_positions, num_mlm_preds)
         # print(mlm_input_tokens_id.shape)
+        #print([mlm_input_tokens_id,mlm_label])
         return mlm_input_tokens_id, mlm_label
 
     @cache
@@ -172,26 +167,25 @@ class Load1KGPDataset(object):
         else:
             first_start = self.first_test_start
             last_start = self.last_test_start
-        paragraphs = read_1KGP(filepath, first_start=first_start, last_start=last_start, max_len=self.max_position_embeddings)
+        paragraphs = read_dnaseq(filepath, first_start=first_start, last_start=last_start, max_len=self.max_position_embeddings)
         # 返回的是一个二维列表，每个列表可以看做是一个段落（其中每个元素为一句话）
         data = []
         max_len = 0
         # 这里的max_len用来记录整个数据集中最长序列的长度，在后续可将其作为padding长度的标准
         desc = f" ## 正在构造MLM样本({filepath.split('.')[1]})"
         for paragraph in tqdm(paragraphs, ncols=80, desc=desc):  # 遍历每个
-            token_ids = [self.vocab[token]
-                         for token in self.tokenizer(paragraph)]
+            token_ids = [self.vocab[token] for token in self.tokenizer(paragraph)]
             if len(token_ids) > self.max_position_embeddings:
                 # BERT预训练模型只取前512个字符
                 token_ids = token_ids[:self.max_position_embeddings]
-            # logging.debug(f" ## Mask之前token ids:{token_ids}")
+            #logging.debug(f" ## Mask之前token ids:{token_ids}")
             mlm_input_tokens_id, mlm_label = self.get_masked_sample(token_ids)
             token_ids = torch.tensor(mlm_input_tokens_id, dtype=torch.long)
             mlm_label = torch.tensor(mlm_label, dtype=torch.long)
             max_len = max(max_len, token_ids.size(0))
-            # logging.debug(f" ## Mask之后token ids:{token_ids.tolist()}")
-            # logging.debug(f" ## Mask之后label ids:{mlm_label.tolist()}")
-            # logging.debug(f" ## 当前样本构造结束================== \n\n")
+            #logging.debug(f" ## Mask之后token ids:{token_ids.tolist()}")
+            #logging.debug(f" ## Mask之后label ids:{mlm_label.tolist()}")
+            #logging.debug(f" ## 当前样本构造结束================== \n\n")
             data.append([token_ids, mlm_label])
 
         all_data = {'data': data, 'max_len': max_len}
@@ -234,8 +228,7 @@ class Load1KGPDataset(object):
         if only_test:
             logging.info(f"## 成功返回测试集，一共包含样本{len(test_iter.dataset)}个")
             return test_iter
-        data = self.data_process(
-            filepath=train_file_path, istraining=True, postfix='train' + postfix)
+        data = self.data_process(filepath=train_file_path, istraining=True, postfix='train' + postfix)
         train_data, max_len = data['data'], data['max_len']
         if self.max_sen_len == 'same':
             self.max_sen_len = max_len
@@ -284,6 +277,43 @@ def span_masking(sentence, spans, tokens, MASK_IDS, mask_id, pad_len, mask, repl
     # if pair_targets is None:
     return sentence, target, pair_targets
 
+def mask(self, sentence, entity_map=None):
+        """mask tokens for masked language model training
+        Args:
+            sentence: 1d tensor, token list to be masked
+            mask_ratio: ratio of tokens to be masked in the sentence
+        Return:
+            masked_sent: masked sentence
+        """
+        sent_length = len(sentence)
+        mask_num = math.ceil(sent_length * self.mask_ratio)
+        mask = set()
+        word_piece_map = self.paragraph_info.get_word_piece_map(sentence)
+        # get entity spans
+        entity_spans, spans = [], []
+        new_entity = True
+        for i in range(entity_map.length()):
+            if entity_map[i] and new_entity:
+                entity_spans.append([i, i])
+                new_entity = False
+            elif entity_map[i] and not new_entity:
+                entity_spans[-1][-1] = i
+            else:
+                new_entity = True
+        while len(mask) < mask_num:
+            if np.random.random() <= self.args.ner_masking_prob:
+                self.mask_entity(sentence, mask_num, word_piece_map, spans, mask, entity_spans)
+            else:
+                span_len = np.random.choice(self.lens, p=self.len_distrib)
+                anchor  = np.random.choice(sent_length)
+                if anchor in mask:
+                    continue
+                self.mask_random_span(sentence, mask_num, word_piece_map, spans, mask, span_len, anchor)
+        sentence, target, pair_targets = span_masking(sentence, spans, self.tokens, self.pad, self.mask_id, self.max_pair_targets, mask, replacement=self.args.replacement_method, endpoints=self.args.endpoints)
+        if self.args.return_only_spans:
+            pair_targets = None
+        return sentence, target, pair_targets
+
 def merge_intervals(intervals):
     intervals = sorted(intervals, key=lambda x : x[0])
     merged = []
@@ -296,9 +326,8 @@ def merge_intervals(intervals):
         # otherwise, there is overlap, so we merge the current and previous
         # intervals.
             merged[-1][1] = max(merged[-1][1], interval[1])
-
     return merged
 
 
 if __name__ == '__main__':
-    read_1KGP(filepath='/home/linwenhao/Berthap/data/dnabert/hap_test.csv')
+    read_dnaseq(filepath='/home/linwenhao/Berthap/data/dnabert/hap_test.csv')

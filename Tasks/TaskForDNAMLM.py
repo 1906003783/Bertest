@@ -50,7 +50,7 @@ class ModelConfig:
         self.masked_token_unchanged_rate = 1
         self.log_level = logging.DEBUG
         self.use_torch_multi_head = False  # False表示使用model/BasicBert/MyTransformer中的多头实现
-        self.epochs = 200
+        self.epochs = 100
         self.model_val_per_epoch = 1
         self.first_train_start = first_train_start
         self.last_train_start = last_train_start
@@ -228,8 +228,7 @@ def evaluate(config, data_iter, model, PAD_IDX):
     mlm_corrects, mlm_totals, auc, cnt = 0, 0, 0, 0
     with torch.no_grad():
         for idx, (b_token_ids, b_mask, b_mlm_label) in enumerate(data_iter):
-            b_token_ids = b_token_ids.to(
-                config.device)  # [src_len, batch_size]
+            b_token_ids = b_token_ids.to(config.device)  # [src_len, batch_size]
             b_mask = b_mask.to(config.device)
             b_mlm_label = b_mlm_label.to(config.device)
             mlm_logits = model(input_ids=b_token_ids,
@@ -292,11 +291,11 @@ if __name__ == '__main__':
     parser.add_argument('-ftrs', '--first_train_start', type=int,
                         help='Position where first 512 SNPs in training set start.', default=512)
     parser.add_argument('-ltrs', '--last_train_start', type=int,
-                        help='Position where last 512 SNPs in training set start.', default=512)
+                        help='Position where last 512 SNPs in training set start.', default=1024)
     parser.add_argument('-ftes', '--first_test_start', type=int,
                         help='Position where first 512 SNPs in testing set start.', default=512)
     parser.add_argument('-ltes', '--last_test_start', type=int,
-                        help='Position where first 512 SNPs in testing set start.', default=512)
+                        help='Position where last 512 SNPs in testing set start.', default=1024)
     parser.add_argument('-i', '--inference', action='store_true',
                         help='To do inference on testing set with trained model.')
     parser.add_argument('-trs', '--train_set', type=str,
@@ -326,6 +325,3 @@ if __name__ == '__main__':
     else:
         train(config)
 
-        # sentences = ["I no longer love her, true, but perhaps I love her.",
-        #              "Love is so short and oblivion so long."]
-        # inference(config, sentences, masked=False, language='en')

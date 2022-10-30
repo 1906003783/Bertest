@@ -1,0 +1,189 @@
+[2022-10-24 04:16:06] - INFO: 成功导入BERT配置文件 /root/autodl-tmp/Bertest/bert_dna/config.json
+[2022-10-24 04:16:06] - INFO:  ### 将当前配置打印到日志文件中 
+[2022-10-24 04:16:06] - INFO: ### project_dir = /root/autodl-tmp/Bertest
+[2022-10-24 04:16:06] - INFO: ### pretrained_model_dir = /root/autodl-tmp/Bertest/bert_dna
+[2022-10-24 04:16:06] - INFO: ### logs_save_dir = /root/autodl-tmp/Bertest/logs
+[2022-10-24 04:16:06] - INFO: ### use_embedding_weight = True
+[2022-10-24 04:16:06] - INFO: ### vocab_size = 9
+[2022-10-24 04:16:06] - INFO: ### hidden_size = 768
+[2022-10-24 04:16:06] - INFO: ### num_hidden_layers = 12
+[2022-10-24 04:16:06] - INFO: ### num_attention_heads = 12
+[2022-10-24 04:16:06] - INFO: ### hidden_act = gelu
+[2022-10-24 04:16:06] - INFO: ### intermediate_size = 3072
+[2022-10-24 04:16:06] - INFO: ### pad_token_id = 0
+[2022-10-24 04:16:06] - INFO: ### hidden_dropout_prob = 0.1
+[2022-10-24 04:16:06] - INFO: ### attention_probs_dropout_prob = 0.1
+[2022-10-24 04:16:06] - INFO: ### max_position_embeddings = 512
+[2022-10-24 04:16:06] - INFO: ### type_vocab_size = 2
+[2022-10-24 04:16:06] - INFO: ### initializer_range = 0.02
+[2022-10-24 04:16:06] - INFO: ### layer_norm_eps = 1e-12
+[2022-10-24 04:16:06] - INFO: ### model_type = bert
+[2022-10-24 04:16:06] - INFO: ### pooler_type = all_token_average
+[2022-10-24 04:17:01] - INFO: 成功导入BERT配置文件 /root/autodl-tmp/Bertest/bert_dna/config.json
+[2022-10-24 04:17:01] - INFO:  ### 将当前配置打印到日志文件中 
+[2022-10-24 04:17:01] - INFO: ### project_dir = /root/autodl-tmp/Bertest
+[2022-10-24 04:17:01] - INFO: ### pretrained_model_dir = /root/autodl-tmp/Bertest/bert_dna
+[2022-10-24 04:17:01] - INFO: ### logs_save_dir = /root/autodl-tmp/Bertest/logs
+[2022-10-24 04:17:01] - INFO: ### use_embedding_weight = True
+[2022-10-24 04:17:01] - INFO: ### vocab_size = 9
+[2022-10-24 04:17:01] - INFO: ### hidden_size = 768
+[2022-10-24 04:17:01] - INFO: ### num_hidden_layers = 12
+[2022-10-24 04:17:01] - INFO: ### num_attention_heads = 12
+[2022-10-24 04:17:01] - INFO: ### hidden_act = gelu
+[2022-10-24 04:17:01] - INFO: ### intermediate_size = 3072
+[2022-10-24 04:17:01] - INFO: ### pad_token_id = 0
+[2022-10-24 04:17:01] - INFO: ### hidden_dropout_prob = 0.1
+[2022-10-24 04:17:01] - INFO: ### attention_probs_dropout_prob = 0.1
+[2022-10-24 04:17:01] - INFO: ### max_position_embeddings = 512
+[2022-10-24 04:17:01] - INFO: ### type_vocab_size = 2
+[2022-10-24 04:17:01] - INFO: ### initializer_range = 0.02
+[2022-10-24 04:17:01] - INFO: ### layer_norm_eps = 1e-12
+[2022-10-24 04:17:01] - INFO: ### model_type = bert
+[2022-10-24 04:17:01] - INFO: ### pooler_type = all_token_average
+[2022-10-24 04:17:32] - INFO: 成功导入BERT配置文件 /root/autodl-tmp/Bertest/bert_dna/config.json
+[2022-10-24 04:17:32] - INFO:  ### 将当前配置打印到日志文件中 
+[2022-10-24 04:17:32] - INFO: ### project_dir = /root/autodl-tmp/Bertest
+[2022-10-24 04:17:32] - INFO: ### pretrained_model_dir = /root/autodl-tmp/Bertest/bert_dna
+[2022-10-24 04:17:32] - INFO: ### logs_save_dir = /root/autodl-tmp/Bertest/logs
+[2022-10-24 04:17:32] - INFO: ### use_embedding_weight = True
+[2022-10-24 04:17:32] - INFO: ### vocab_size = 9
+[2022-10-24 04:17:32] - INFO: ### hidden_size = 768
+[2022-10-24 04:17:32] - INFO: ### num_hidden_layers = 12
+[2022-10-24 04:17:32] - INFO: ### num_attention_heads = 12
+[2022-10-24 04:17:32] - INFO: ### hidden_act = gelu
+[2022-10-24 04:17:32] - INFO: ### intermediate_size = 3072
+[2022-10-24 04:17:32] - INFO: ### pad_token_id = 0
+[2022-10-24 04:17:32] - INFO: ### hidden_dropout_prob = 0.1
+[2022-10-24 04:17:32] - INFO: ### attention_probs_dropout_prob = 0.1
+[2022-10-24 04:17:32] - INFO: ### max_position_embeddings = 512
+[2022-10-24 04:17:32] - INFO: ### type_vocab_size = 2
+[2022-10-24 04:17:32] - INFO: ### initializer_range = 0.02
+[2022-10-24 04:17:32] - INFO: ### layer_norm_eps = 1e-12
+[2022-10-24 04:17:32] - INFO: ### model_type = bert
+[2022-10-24 04:17:32] - INFO: ### pooler_type = all_token_average
+[2022-10-24 04:19:14] - INFO: 成功导入BERT配置文件 /root/autodl-tmp/Bertest/bert_dna/config.json
+[2022-10-24 04:19:14] - INFO:  ### 将当前配置打印到日志文件中 
+[2022-10-24 04:19:14] - INFO: ### project_dir = /root/autodl-tmp/Bertest
+[2022-10-24 04:19:14] - INFO: ### pretrained_model_dir = /root/autodl-tmp/Bertest/bert_dna
+[2022-10-24 04:19:14] - INFO: ### logs_save_dir = /root/autodl-tmp/Bertest/logs
+[2022-10-24 04:19:14] - INFO: ### use_embedding_weight = True
+[2022-10-24 04:19:14] - INFO: ### vocab_size = 9
+[2022-10-24 04:19:14] - INFO: ### hidden_size = 768
+[2022-10-24 04:19:14] - INFO: ### num_hidden_layers = 12
+[2022-10-24 04:19:14] - INFO: ### num_attention_heads = 12
+[2022-10-24 04:19:14] - INFO: ### hidden_act = gelu
+[2022-10-24 04:19:14] - INFO: ### intermediate_size = 3072
+[2022-10-24 04:19:14] - INFO: ### pad_token_id = 0
+[2022-10-24 04:19:14] - INFO: ### hidden_dropout_prob = 0.1
+[2022-10-24 04:19:14] - INFO: ### attention_probs_dropout_prob = 0.1
+[2022-10-24 04:19:14] - INFO: ### max_position_embeddings = 512
+[2022-10-24 04:19:14] - INFO: ### type_vocab_size = 2
+[2022-10-24 04:19:14] - INFO: ### initializer_range = 0.02
+[2022-10-24 04:19:14] - INFO: ### layer_norm_eps = 1e-12
+[2022-10-24 04:19:14] - INFO: ### model_type = bert
+[2022-10-24 04:19:14] - INFO: ### pooler_type = all_token_average
+[2022-10-24 04:25:36] - INFO: 成功导入BERT配置文件 /root/autodl-tmp/Bertest/bert_dna/config.json
+[2022-10-24 04:25:36] - INFO:  ### 将当前配置打印到日志文件中 
+[2022-10-24 04:25:36] - INFO: ### project_dir = /root/autodl-tmp/Bertest
+[2022-10-24 04:25:36] - INFO: ### pretrained_model_dir = /root/autodl-tmp/Bertest/bert_dna
+[2022-10-24 04:25:36] - INFO: ### logs_save_dir = /root/autodl-tmp/Bertest/logs
+[2022-10-24 04:25:36] - INFO: ### use_embedding_weight = True
+[2022-10-24 04:25:36] - INFO: ### vocab_size = 9
+[2022-10-24 04:25:36] - INFO: ### hidden_size = 768
+[2022-10-24 04:25:36] - INFO: ### num_hidden_layers = 12
+[2022-10-24 04:25:36] - INFO: ### num_attention_heads = 12
+[2022-10-24 04:25:36] - INFO: ### hidden_act = gelu
+[2022-10-24 04:25:36] - INFO: ### intermediate_size = 3072
+[2022-10-24 04:25:36] - INFO: ### pad_token_id = 0
+[2022-10-24 04:25:36] - INFO: ### hidden_dropout_prob = 0.1
+[2022-10-24 04:25:36] - INFO: ### attention_probs_dropout_prob = 0.1
+[2022-10-24 04:25:36] - INFO: ### max_position_embeddings = 512
+[2022-10-24 04:25:36] - INFO: ### type_vocab_size = 2
+[2022-10-24 04:25:36] - INFO: ### initializer_range = 0.02
+[2022-10-24 04:25:36] - INFO: ### layer_norm_eps = 1e-12
+[2022-10-24 04:25:36] - INFO: ### model_type = bert
+[2022-10-24 04:25:36] - INFO: ### pooler_type = all_token_average
+[2022-10-24 04:25:55] - INFO: 成功导入BERT配置文件 /root/autodl-tmp/Bertest/bert_dna/config.json
+[2022-10-24 04:25:55] - INFO:  ### 将当前配置打印到日志文件中 
+[2022-10-24 04:25:55] - INFO: ### project_dir = /root/autodl-tmp/Bertest
+[2022-10-24 04:25:55] - INFO: ### pretrained_model_dir = /root/autodl-tmp/Bertest/bert_dna
+[2022-10-24 04:25:55] - INFO: ### logs_save_dir = /root/autodl-tmp/Bertest/logs
+[2022-10-24 04:25:55] - INFO: ### use_embedding_weight = True
+[2022-10-24 04:25:55] - INFO: ### vocab_size = 9
+[2022-10-24 04:25:55] - INFO: ### hidden_size = 768
+[2022-10-24 04:25:55] - INFO: ### num_hidden_layers = 12
+[2022-10-24 04:25:55] - INFO: ### num_attention_heads = 12
+[2022-10-24 04:25:55] - INFO: ### hidden_act = gelu
+[2022-10-24 04:25:55] - INFO: ### intermediate_size = 3072
+[2022-10-24 04:25:55] - INFO: ### pad_token_id = 0
+[2022-10-24 04:25:55] - INFO: ### hidden_dropout_prob = 0.1
+[2022-10-24 04:25:55] - INFO: ### attention_probs_dropout_prob = 0.1
+[2022-10-24 04:25:55] - INFO: ### max_position_embeddings = 512
+[2022-10-24 04:25:55] - INFO: ### type_vocab_size = 2
+[2022-10-24 04:25:55] - INFO: ### initializer_range = 0.02
+[2022-10-24 04:25:55] - INFO: ### layer_norm_eps = 1e-12
+[2022-10-24 04:25:55] - INFO: ### model_type = bert
+[2022-10-24 04:25:55] - INFO: ### pooler_type = all_token_average
+[2022-10-24 04:27:06] - INFO: 成功导入BERT配置文件 /root/autodl-tmp/Bertest/bert_dna/config.json
+[2022-10-24 04:27:06] - INFO:  ### 将当前配置打印到日志文件中 
+[2022-10-24 04:27:06] - INFO: ### project_dir = /root/autodl-tmp/Bertest
+[2022-10-24 04:27:06] - INFO: ### pretrained_model_dir = /root/autodl-tmp/Bertest/bert_dna
+[2022-10-24 04:27:06] - INFO: ### logs_save_dir = /root/autodl-tmp/Bertest/logs
+[2022-10-24 04:27:06] - INFO: ### use_embedding_weight = True
+[2022-10-24 04:27:06] - INFO: ### vocab_size = 9
+[2022-10-24 04:27:06] - INFO: ### hidden_size = 768
+[2022-10-24 04:27:06] - INFO: ### num_hidden_layers = 12
+[2022-10-24 04:27:06] - INFO: ### num_attention_heads = 12
+[2022-10-24 04:27:06] - INFO: ### hidden_act = gelu
+[2022-10-24 04:27:06] - INFO: ### intermediate_size = 3072
+[2022-10-24 04:27:06] - INFO: ### pad_token_id = 0
+[2022-10-24 04:27:06] - INFO: ### hidden_dropout_prob = 0.1
+[2022-10-24 04:27:06] - INFO: ### attention_probs_dropout_prob = 0.1
+[2022-10-24 04:27:06] - INFO: ### max_position_embeddings = 512
+[2022-10-24 04:27:06] - INFO: ### type_vocab_size = 2
+[2022-10-24 04:27:06] - INFO: ### initializer_range = 0.02
+[2022-10-24 04:27:06] - INFO: ### layer_norm_eps = 1e-12
+[2022-10-24 04:27:06] - INFO: ### model_type = bert
+[2022-10-24 04:27:06] - INFO: ### pooler_type = all_token_average
+[2022-10-24 04:27:52] - INFO: 成功导入BERT配置文件 /root/autodl-tmp/Bertest/bert_dna/config.json
+[2022-10-24 04:27:52] - INFO:  ### 将当前配置打印到日志文件中 
+[2022-10-24 04:27:52] - INFO: ### project_dir = /root/autodl-tmp/Bertest
+[2022-10-24 04:27:52] - INFO: ### pretrained_model_dir = /root/autodl-tmp/Bertest/bert_dna
+[2022-10-24 04:27:52] - INFO: ### logs_save_dir = /root/autodl-tmp/Bertest/logs
+[2022-10-24 04:27:52] - INFO: ### use_embedding_weight = True
+[2022-10-24 04:27:52] - INFO: ### vocab_size = 9
+[2022-10-24 04:27:52] - INFO: ### hidden_size = 768
+[2022-10-24 04:27:52] - INFO: ### num_hidden_layers = 12
+[2022-10-24 04:27:52] - INFO: ### num_attention_heads = 12
+[2022-10-24 04:27:52] - INFO: ### hidden_act = gelu
+[2022-10-24 04:27:52] - INFO: ### intermediate_size = 3072
+[2022-10-24 04:27:52] - INFO: ### pad_token_id = 0
+[2022-10-24 04:27:52] - INFO: ### hidden_dropout_prob = 0.1
+[2022-10-24 04:27:52] - INFO: ### attention_probs_dropout_prob = 0.1
+[2022-10-24 04:27:52] - INFO: ### max_position_embeddings = 512
+[2022-10-24 04:27:52] - INFO: ### type_vocab_size = 2
+[2022-10-24 04:27:52] - INFO: ### initializer_range = 0.02
+[2022-10-24 04:27:52] - INFO: ### layer_norm_eps = 1e-12
+[2022-10-24 04:27:52] - INFO: ### model_type = bert
+[2022-10-24 04:27:52] - INFO: ### pooler_type = all_token_average
+[2022-10-24 04:28:10] - INFO: 成功导入BERT配置文件 /root/autodl-tmp/Bertest/bert_dna/config.json
+[2022-10-24 04:28:10] - INFO:  ### 将当前配置打印到日志文件中 
+[2022-10-24 04:28:10] - INFO: ### project_dir = /root/autodl-tmp/Bertest
+[2022-10-24 04:28:10] - INFO: ### pretrained_model_dir = /root/autodl-tmp/Bertest/bert_dna
+[2022-10-24 04:28:10] - INFO: ### logs_save_dir = /root/autodl-tmp/Bertest/logs
+[2022-10-24 04:28:10] - INFO: ### use_embedding_weight = True
+[2022-10-24 04:28:10] - INFO: ### vocab_size = 9
+[2022-10-24 04:28:10] - INFO: ### hidden_size = 768
+[2022-10-24 04:28:10] - INFO: ### num_hidden_layers = 12
+[2022-10-24 04:28:10] - INFO: ### num_attention_heads = 12
+[2022-10-24 04:28:10] - INFO: ### hidden_act = gelu
+[2022-10-24 04:28:10] - INFO: ### intermediate_size = 3072
+[2022-10-24 04:28:10] - INFO: ### pad_token_id = 0
+[2022-10-24 04:28:10] - INFO: ### hidden_dropout_prob = 0.1
+[2022-10-24 04:28:10] - INFO: ### attention_probs_dropout_prob = 0.1
+[2022-10-24 04:28:10] - INFO: ### max_position_embeddings = 512
+[2022-10-24 04:28:10] - INFO: ### type_vocab_size = 2
+[2022-10-24 04:28:10] - INFO: ### initializer_range = 0.02
+[2022-10-24 04:28:10] - INFO: ### layer_norm_eps = 1e-12
+[2022-10-24 04:28:10] - INFO: ### model_type = bert
+[2022-10-24 04:28:10] - INFO: ### pooler_type = all_token_average
