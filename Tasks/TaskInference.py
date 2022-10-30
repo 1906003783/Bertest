@@ -111,83 +111,6 @@ def fakeTokenizer(s):
     return list(s)
 
 
-def train(config):
-    model = BertForMaskedLM(config)
-    if os.path.exists(config.model_save_path):
-        # loaded_paras = torch.load(config.model_save_path)
-        # model.load_state_dict(loaded_paras)
-        model = torch.load(config.model_save_path, map_location={'cuda:1':'cuda:0'})
-        logging.info("## 成功载入已有模型，进行追加训练......")
-    model = model.to(config.device)
-    model.train()
-    bert_tokenize = fakeTokenizer
-    #bert_tokenize = BertTokenizer.from_pretrained(config.pretrained_model_dir).tokenize
-    data_loader = Load1KGPDataset(vocab_path=config.vocab_path,
-                                  tokenizer=bert_tokenize,
-                                  batch_size=config.batch_size,
-                                  max_sen_len=config.max_sen_len,
-                                  max_position_embeddings=config.max_position_embeddings,
-                                  pad_index=config.pad_index,
-                                  is_sample_shuffle=config.is_sample_shuffle,
-                                  random_state=config.random_state,
-                                  data_name=config.data_name,
-                                  masked_rate=config.masked_rate,
-                                  masked_token_rate=config.masked_token_rate,
-                                  masked_token_unchanged_rate=config.masked_token_unchanged_rate,
-                                  first_train_start=config.first_train_start,
-                                  last_train_start=config.last_train_start,
-                                  first_test_start=config.first_test_start,
-                                  last_test_start=config.last_test_start)
-    train_iter, test_iter, val_iter = \
-        data_loader.load_train_val_test_data(test_file_path=config.test_file_path,
-                                             train_file_path=config.train_file_path,
-                                             val_file_path=config.val_file_path)
-    optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
-    max_acc = 0
-    for epoch in range(config.epochs):
-        losses = 0
-        start_time = time.time()
-        for idx, (b_token_ids, b_mask, b_mlm_label) in enumerate(train_iter):
-            b_token_ids = b_token_ids.to(
-                config.device)  # [src_len, batch_size]
-            b_mask = b_mask.to(config.device)
-            b_mlm_label = b_mlm_label.to(config.device)
-            loss, mlm_logits = model(input_ids=b_token_ids,
-                                                  attention_mask=b_mask,
-                                                  token_type_ids=None,
-                                                  masked_lm_labels=b_mlm_label,
-                                                  next_sentence_labels=None)
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-            losses += loss.item()
-            mlm_acc, _, _ = accuracy(
-                mlm_logits, b_mlm_label, data_loader.PAD_IDX)
-            auc = roc_auc(mlm_logits, b_mlm_label,
-                          config.vocab_size, data_loader.PAD_IDX)
-            if idx % 20 == 0:
-                logging.info(f"Epoch: {epoch}, Batch[{idx}/{len(train_iter)}], "
-                             f"Train loss :{loss.item():.3f}, Train mlm acc: {mlm_acc:.3f}, roc_auc: {auc:.3f}")
-                # print(attn_weight.shape)
-
-        end_time = time.time()
-        train_loss = losses / len(train_iter)
-        logging.info(f"Epoch: {epoch}, Train loss: "
-                     f"{train_loss:.3f}, Epoch time = {(end_time - start_time):.3f}s")
-        # attn_to_figure(attn_weight, epoch)
-        if (epoch + 1) % config.model_val_per_epoch == 0:
-            mlm_acc, auc = evaluate(
-                config, val_iter, model, data_loader.PAD_IDX)
-            logging.info(
-                f" ### MLM Accuracy on val: {round(mlm_acc, 4)}, roc_auc: {auc:.3f}")
-            if mlm_acc > max_acc:
-                max_acc = mlm_acc
-                # torch.save(model.state_dict(), config.model_save_path)
-                torch.save(model, config.model_save_path)
-
-
-
-
 def roc_auc(mlm_logits, mlm_labels, vocab_size, PAD_IDX):
     with torch.no_grad():
         mlm_pred = mlm_logits.transpose(0, 1).reshape(-1, mlm_logits.shape[2])
@@ -291,19 +214,17 @@ if __name__ == '__main__':
     parser.add_argument('-mr', '--masked_rate', type=float,
                         help='Masking rate of SNPs.', default=0.4)
     parser.add_argument('-ftrs', '--first_train_start', type=int,
-                        help='Position where first 512 SNPs in training set start.', default=512)
+                        help='Position where first 512 SNPs in training set start.', default=0)
     parser.add_argument('-ltrs', '--last_train_start', type=int,
-                        help='Position where last 512 SNPs in training set start.', default=1024)
+                        help='Position where last 512 SNPs in training set start.', default=4000)
     parser.add_argument('-ftes', '--first_test_start', type=int,
-                        help='Position where first 512 SNPs in testing set start.', default=512)
+                        help='Position where first 512 SNPs in testing set start.', default=0)
     parser.add_argument('-ltes', '--last_test_start', type=int,
-                        help='Position where last 512 SNPs in testing set start.', default=1024)
-    parser.add_argument('-i', '--inference', action='store_true',
-                        help='To do inference on testing set with trained model.')
+                        help='Position where last 512 SNPs in testing set start.', default=4000)
     parser.add_argument('-trs', '--train_set', type=str,
                         help='train_set', default='hap_train.csv')
     parser.add_argument('-tes', '--test_set', type=str,
-                        help='test_set', default='MXL.csv')
+                        help='test_set', default='hap_test.csv')
 
     args = parser.parse_args()
     if args.last_train_start < args.first_train_start:
@@ -318,12 +239,10 @@ if __name__ == '__main__':
                          last_test_start=args.last_test_start,
                          train_set=args.train_set,
                          test_set=args.test_set)
-    if args.inference:
-        files = os.listdir('../data/dnabert/')
-        for file in files:
-            if file.startswith('hap_test_'):
-                os.remove('../data/dnabert/' + file)
-        inference(config)
-    else:
-        train(config)
+
+    files = os.listdir('../data/dnabert/')
+    for file in files:
+        if file.startswith('hap_test_'):
+            os.remove('../data/dnabert/' + file)
+    inference(config)
 

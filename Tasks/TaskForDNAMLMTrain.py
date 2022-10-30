@@ -245,45 +245,6 @@ def evaluate(config, data_iter, model, PAD_IDX):
     return (float(mlm_corrects) / mlm_totals, auc / cnt)
 
 
-def inference(config):
-    model = BertForMaskedLM(config)
-    if os.path.exists(config.model_save_path):
-        # loaded_paras = torch.load(config.model_save_path)
-        # model.load_state_dict(loaded_paras)
-        model = torch.load(config.model_save_path, map_location={'cuda:1':'cuda:0'})
-        logging.info("## 成功载入已有模型，进行推断......")
-    else:
-        logging.info("## 已训练模型不存在，退出......")
-        return
-
-    model = model.to(config.device)
-    bert_tokenize = fakeTokenizer
-    #bert_tokenize = BertTokenizer.from_pretrained(config.pretrained_model_dir).tokenize
-    data_loader = Load1KGPDataset(vocab_path=config.vocab_path,
-                                  tokenizer=bert_tokenize,
-                                  batch_size=config.batch_size,
-                                  max_sen_len=config.max_sen_len,
-                                  max_position_embeddings=config.max_position_embeddings,
-                                  pad_index=config.pad_index,
-                                  is_sample_shuffle=config.is_sample_shuffle,
-                                  random_state=config.random_state,
-                                  data_name=config.data_name,
-                                  masked_rate=config.masked_rate,
-                                  masked_token_rate=config.masked_token_rate,
-                                  masked_token_unchanged_rate=config.masked_token_unchanged_rate,
-                                  first_train_start=config.first_train_start,
-                                  last_train_start=config.last_train_start,
-                                  first_test_start=config.first_test_start,
-                                  last_test_start=config.last_test_start)
-    _, _, val_iter = \
-        data_loader.load_train_val_test_data(test_file_path=config.test_file_path,
-                                             train_file_path=config.train_file_path,
-                                             val_file_path=config.val_file_path)
-
-    mlm_acc, auc = evaluate(config, val_iter, model, data_loader.PAD_IDX)
-    logging.info(
-        f" ### MLM Accuracy on val: {round(mlm_acc, 4)}, roc_auc: {auc:.3f}")
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -291,19 +252,17 @@ if __name__ == '__main__':
     parser.add_argument('-mr', '--masked_rate', type=float,
                         help='Masking rate of SNPs.', default=0.4)
     parser.add_argument('-ftrs', '--first_train_start', type=int,
-                        help='Position where first 512 SNPs in training set start.', default=512)
+                        help='Position where first 512 SNPs in training set start.', default=0)
     parser.add_argument('-ltrs', '--last_train_start', type=int,
-                        help='Position where last 512 SNPs in training set start.', default=1024)
+                        help='Position where last 512 SNPs in training set start.', default=4000)
     parser.add_argument('-ftes', '--first_test_start', type=int,
-                        help='Position where first 512 SNPs in testing set start.', default=512)
+                        help='Position where first 512 SNPs in testing set start.', default=0)
     parser.add_argument('-ltes', '--last_test_start', type=int,
-                        help='Position where last 512 SNPs in testing set start.', default=1024)
-    parser.add_argument('-i', '--inference', action='store_true',
-                        help='To do inference on testing set with trained model.')
+                        help='Position where last 512 SNPs in testing set start.', default=4000)
     parser.add_argument('-trs', '--train_set', type=str,
                         help='train_set', default='hap_train.csv')
     parser.add_argument('-tes', '--test_set', type=str,
-                        help='test_set', default='MXL.csv')
+                        help='test_set', default='hap_train.csv')
 
     args = parser.parse_args()
     if args.last_train_start < args.first_train_start:
@@ -318,12 +277,5 @@ if __name__ == '__main__':
                          last_test_start=args.last_test_start,
                          train_set=args.train_set,
                          test_set=args.test_set)
-    if args.inference:
-        files = os.listdir('../data/dnabert/')
-        for file in files:
-            if file.startswith('hap_test_'):
-                os.remove('../data/dnabert/' + file)
-        inference(config)
-    else:
-        train(config)
+    train(config)
 
