@@ -152,6 +152,7 @@ def read_dnaseq(filepath=None, inital_site=0, number_of_group=1, max_len=512):
     for i in range(number_of_group):
         for vec in df:
             paragraphs.append(vec2str(vec, start, max_len=max_len))
+        start+=max_len
     return paragraphs
 
 

@@ -49,7 +49,7 @@ class ModelConfig:
         self.masked_token_unchanged_rate = 1
         self.log_level = logging.DEBUG
         self.use_torch_multi_head = False  # False表示使用model/BasicBert/MyTransformer中的多头实现
-        self.epochs = 100
+        self.epochs = 20
         self.model_val_per_epoch = 1
         self.inital_site = inital_site
         self.number_of_group = number_of_group
